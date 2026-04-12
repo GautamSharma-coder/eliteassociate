@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elite Associates — Tax Consultants</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #F5F0E8;
+      --surface: #FDFAF5;
+      --navy: #1A3A5C;
+      --navy-soft: #2A4A6C;
+      --gold: #C9A84C;
+      --gold-soft: rgba(201, 168, 76, 0.15);
+      --ink: #1C1C1C;
+      --ink-2: #4A4A4A;
+      --ink-3: #8A8A8A;
+      --border: rgba(26, 58, 92, 0.1);
+      --border-strong: rgba(26, 58, 92, 0.18);
+      --white: #FFFFFF;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Instrument Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(245, 240, 232, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 max(24px, 5vw);
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo {
+      height: 32px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .nav-icon {
+      width: 30px;
+      height: 30px;
+      background: var(--navy);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Instrument Serif', serif;
+      font-size: 13px;
+      color: var(--gold);
+    }
+
+    .nav-title {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--navy);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      padding: 6px 12px;
+      font-size: 0.82rem;
+      font-weight: 400;
+      color: var(--ink-2);
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .nav-links a:hover {
+      background: var(--border);
+      color: var(--ink);
+    }
+
+    .nav-btn {
+      background: var(--navy) !important;
+      color: var(--white) !important;
+    }
+
+    .nav-btn:hover {
+      background: var(--navy-soft) !important;
+    }
+
+    /* HERO */
+    .hero {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 80px max(24px, 5vw) 64px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      background: var(--gold-soft);
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #8A6A20;
+      margin-bottom: 2rem;
+    }
+
+    .badge-dot {
+      width: 5px;
+      height: 5px;
+      background: var(--gold);
+      border-radius: 50%;
+    }
+
+    h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2.6rem, 5vw, 3.8rem);
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--navy);
+      letter-spacing: -0.02em;
+      margin-bottom: 1.2rem;
+    }
+
+    h1 i {
+      font-style: italic;
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--ink-2);
+      line-height: 1.7;
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 20px;
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+
+    .btn-dark {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .btn-dark:hover {
+      background: var(--navy-soft);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(26, 58, 92, 0.2);
+    }
+
+    .btn-outline {
+      background: var(--surface);
+      color: var(--ink-2);
+      border: 1px solid var(--border-strong);
+    }
+
+    .btn-outline:hover {
+      background: var(--white);
+      color: var(--ink);
+      transform: translateY(-1px);
+    }
+
+    .hero-meta {
+      display: flex;
+      margin-top: 3.5rem;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      background: var(--surface);
+      overflow: hidden;
+    }
+
+    .hero-stat {
+      flex: 1;
+      padding: 20px 16px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+
+    .hero-stat:last-child {
+      border-right: none;
+    }
+
+    .stat-n {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.8rem;
+      color: var(--navy);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-n sup {
+      font-size: 1rem;
+      color: var(--gold);
+      font-family: 'Instrument Sans', sans-serif;
+    }
+
+    .stat-l {
+      font-size: 0.72rem;
+      color: var(--ink-3);
+    }
+
+    /* DIVIDER */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0 max(24px, 5vw);
+    }
+
+    /* SECTIONS */
+    .section {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 72px max(24px, 5vw);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-bottom: 1rem;
+    }
+
+    .tag::before {
+      content: '';
+      display: block;
+      width: 16px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(1.7rem, 2.8vw, 2.3rem);
+      font-weight: 400;
+      color: var(--navy);
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+    }
+
+    h2 i {
+      font-style: italic;
+    }
+
+    /* SERVICES */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 2.5rem;
+    }
+
+    .service-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+    }
+
+    .service-card:hover {
+      border-color: var(--border-strong);
+      box-shadow: 0 4px 20px rgba(26, 58, 92, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .svc-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--gold-soft);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .svc-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: #8A6A20;
+      fill: none;
+      stroke-width: 1.6;
+    }
+
+    .svc-name {
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+
+    .svc-desc {
+      font-size: 0.82rem;
+      color: var(--ink-3);
+      line-height: 1.65;
+    }
+
+    /* ABOUT */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+      margin-top: 2.5rem;
+    }
+
+    .about-body {
+      font-size: 0.92rem;
+      color: var(--ink-2);
+      line-height: 1.85;
+    }
+
+    .about-body p+p {
+      margin-top: 0.9rem;
+    }
+
+    .profile-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+
+    .profile-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .profile-av {
+      width: 46px;
+      height: 46px;
+      background: var(--navy);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Instrument Serif', serif;
+      font-size: 17px;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .profile-name {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--navy);
+    }
+
+    .profile-role {
+      font-size: 0.76rem;
+      color: var(--ink-3);
+      margin-top: 2px;
+    }
+
+    .profile-hr {
+      height: 1px;
+      background: var(--border);
+      margin: 0 0 16px;
+    }
+
+    .profile-desc {
+      font-size: 0.82rem;
+      color: var(--ink-2);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chip {
+      padding: 4px 10px;
+      font-size: 0.7rem;
+      color: var(--navy);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+
+    /* PROCESS */
+    .process-bg {
+      background: var(--navy);
+      padding: 72px max(24px, 5vw);
+    }
+
+    .process-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .process-bg .tag {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .process-bg .tag::before {
+      background: var(--gold);
+    }
+
+    .process-bg h2 {
+      color: var(--white);
+      margin-bottom: 2.5rem;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .step-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: background 0.2s;
+    }
+
+    .step-card:hover {
+      background: rgba(255, 255, 255, 0.09);
+    }
+
+    .step-num {
+      font-family: 'Instrument Serif', serif;
+      font-size: 0.9rem;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .step-name {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.45);
+      line-height: 1.65;
+    }
+
+    /* CONTACT */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 40px;
+      align-items: start;
+      margin-top: 2.5rem;
+    }
+
+    .contact-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .cc:hover {
+      border-color: var(--border-strong);
+      box-shadow: 0 2px 12px rgba(26, 58, 92, 0.07);
+    }
+
+    .cc-icon {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      background: var(--bg);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cc-icon svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--navy);
+      fill: none;
+      stroke-width: 1.8;
+    }
+
+    .cc-label {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-bottom: 2px;
+    }
+
+    .cc-val {
+      font-size: 0.85rem;
+      color: var(--ink);
+    }
+
+    .form-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .fg {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .flabel {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--ink-2);
+    }
+
+    .finput,
+    .fselect,
+    .ftextarea {
+      padding: 9px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 0.85rem;
+      color: var(--ink);
+      outline: none;
+      appearance: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .finput::placeholder,
+    .ftextarea::placeholder {
+      color: var(--ink-3);
+    }
+
+    .finput:focus,
+    .fselect:focus,
+    .ftextarea:focus {
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(26, 58, 92, 0.08);
+      background: var(--white);
+    }
+
+    .ftextarea {
+      resize: vertical;
+      min-height: 96px;
+    }
+
+    .fsubmit {
+      padding: 10px 20px;
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      align-self: flex-start;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+    }
+
+    .fsubmit:hover {
+      background: var(--navy-soft);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(26, 58, 92, 0.2);
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px max(24px, 5vw);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-name {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--navy);
+    }
+
+    .footer-sep {
+      color: var(--ink-3);
+      font-size: 0.75rem;
+    }
+
+    .footer-sub {
+      font-size: 0.75rem;
+      color: var(--ink-3);
+    }
+
+    .footer-copy {
+      font-size: 0.72rem;
+      color: var(--ink-3);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-badge {
+      animation: fadeUp 0.5s ease both 0.05s;
+    }
+
+    h1 {
+      animation: fadeUp 0.5s ease both 0.12s;
+    }
+
+    .hero-sub {
+      animation: fadeUp 0.5s ease both 0.2s;
+    }
+
+    .hero-actions {
+      animation: fadeUp 0.5s ease both 0.27s;
+    }
+
+    .hero-meta {
+      animation: fadeUp 0.5s ease both 0.34s;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 760px) {
+      .services-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .steps {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-meta {
+        flex-wrap: wrap;
+      }
+
+      .hero-stat {
+        flex: 1 1 45%;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .nav-links li:not(:last-child) {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a class="nav-brand" href="#home">
+      <img src="assets/logo.png" alt="Elite Associates" class="nav-logo">
+      <span class="nav-title">Elite Associates</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#contact" class="nav-btn">Get in touch</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div id="home">
+    <div class="hero">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Taxation & Financial Consultants · Darbhanga, Bihar
+      </div>
+      <h1>Expert tax help,<br><i>clear and simple.</i></h1>
+      <p class="hero-sub">ITR filing, GST compliance, TDS returns, and financial advisory — handled by professionals you
+        can trust.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-dark">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.09 1.18 2 2 0 012 .02h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z" />
+          </svg>
+          Book a consultation
+        </a>
+        <a href="#services" class="btn btn-outline">View services →</a>
+      </div>
+      <div class="hero-meta">
+        <div class="hero-stat">
+          <div class="stat-n">10<sup>+</sup></div>
+          <div class="stat-l">Years active</div>
+        </div>
+        <div class="hero-stat">
+          <div class="stat-n">500<sup>+</sup></div>
+          <div class="stat-l">Clients served</div>
+        </div>
+        <div class="hero-stat">
+          <div class="stat-n">100<sup>%</sup></div>
+          <div class="stat-l">Compliance rate</div>
+        </div>
+        <div class="hero-stat">
+          <div class="stat-n">₹0</div>
+          <div class="stat-l">Penalties incurred</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SERVICES -->
+  <div id="services">
+    <div class="section">
+      <div class="tag">Services</div>
+      <h2>Everything your<br><i>finances need.</i></h2>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="svc-icon"><svg viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+              <polyline points="14,2 14,8 20,8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+            </svg></div>
+          <div class="svc-name">ITR Filing</div>
+          <p class="svc-desc">Accurate, on-time income tax return filing for individuals, salaried employees, and
+            businesses.</p>
+        </div>
+        <div class="service-card">
+          <div class="svc-icon"><svg viewBox="0 0 24 24">
+              <rect x="2" y="7" width="20" height="14" rx="2" />
+              <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+              <line x1="12" y1="12" x2="12" y2="16" />
+              <line x1="10" y1="14" x2="14" y2="14" />
+            </svg></div>
+          <div class="svc-name">GST Compliance</div>
+          <p class="svc-desc">Registration, monthly return filing, reconciliation, and ongoing GST advisory.</p>
+        </div>
+        <div class="service-card">
+          <div class="svc-icon"><svg viewBox="0 0 24 24">
+              <line x1="12" y1="1" x2="12" y2="23" />
+              <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+            </svg></div>
+          <div class="svc-name">TDS Returns</div>
+          <p class="svc-desc">Quarterly TDS filing, deduction management, and penalty-free compliance tracking.</p>
+        </div>
+        <div class="service-card">
+          <div class="svc-icon"><svg viewBox="0 0 24 24">
+              <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" />
+              <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" />
+            </svg></div>
+          <div class="svc-name">Accounting</div>
+          <p class="svc-desc">Ledger maintenance, financial statements, and clear monthly reporting for your business.
+          </p>
+        </div>
+        <div class="service-card">
+          <div class="svc-icon"><svg viewBox="0 0 24 24">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg></div>
+          <div class="svc-name">Financial Advisory</div>
+          <p class="svc-desc">Strategic planning and business structuring advice tailored to your goals.</p>
+        </div>
+        <div class="service-card">
+          <div class="svc-icon"><svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="14" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+            </svg></div>
+          <div class="svc-name">Bookkeeping</div>
+          <p class="svc-desc">Daily transaction recording, bank reconciliation, and audit-ready records year-round.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ABOUT -->
+  <div id="about">
+    <div class="section">
+      <div class="tag">About</div>
+      <h2>Built on trust,<br><i>driven by accuracy.</i></h2>
+      <div class="about-grid">
+        <div class="about-body">
+          <p>Elite Associates is a Darbhanga-based tax and financial consultancy helping individuals and businesses stay
+            fully compliant — without the stress.</p>
+          <p>We handle every filing with precision, stay ahead of deadlines, and make sure you're never caught off-guard
+            by a notice or penalty.</p>
+          <p>Our relationship with clients doesn't end at filing season. We're available throughout the year for
+            guidance, follow-ups, and proactive planning.</p>
+        </div>
+        <div class="profile-box">
+          <div class="profile-top">
+            <div class="profile-av">AK</div>
+            <div>
+              <div class="profile-name">Avinash Kumar</div>
+              <div class="profile-role">Tax Consultant, Elite Associates</div>
+            </div>
+          </div>
+          <div class="profile-hr"></div>
+          <p class="profile-desc">Experienced in direct and indirect tax, financial reporting, and compliance advisory
+            for businesses and individuals across Bihar.</p>
+          <div class="chips">
+            <span class="chip">Income Tax</span>
+            <span class="chip">GST</span>
+            <span class="chip">TDS</span>
+            <span class="chip">Bookkeeping</span>
+            <span class="chip">Advisory</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROCESS -->
+  <div class="process-bg">
+    <div class="process-inner">
+      <div class="tag">How it works</div>
+      <h2>Four steps to <i>sorted finances.</i></h2>
+      <div class="steps">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <div class="step-name">Consultation</div>
+          <p class="step-desc">Share your situation. We assess your needs and recommend the right service.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <div class="step-name">Documents</div>
+          <p class="step-desc">Provide your documents. We handle verification and organisation securely.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <div class="step-name">Filing</div>
+          <p class="step-desc">We prepare and submit your returns accurately, well within deadlines.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">04</div>
+          <div class="step-name">Confirmation</div>
+          <p class="step-desc">Full confirmation and records delivered. We stay on hand for follow-ups.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div id="contact">
+    <div class="section">
+      <div class="tag">Contact</div>
+      <h2>Let's talk <i>about your taxes.</i></h2>
+      <div class="contact-grid">
+        <div class="contact-cards">
+          <a href="tel:+917761946449" class="cc">
+            <div class="cc-icon"><svg viewBox="0 0 24 24">
+                <path
+                  d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.09 1.18 2 2 0 012 .02h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z" />
+              </svg></div>
+            <div>
+              <div class="cc-label">Phone</div>
+              <div class="cc-val">+91 77619 46449</div>
+            </div>
+          </a>
+          <a href="mailto:kumaravinash00005@gmail.com" class="cc">
+            <div class="cc-icon"><svg viewBox="0 0 24 24">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg></div>
+            <div>
+              <div class="cc-label">Email</div>
+              <div class="cc-val">kumaravinash00005@gmail.com</div>
+            </div>
+          </a>
+          <div class="cc">
+            <div class="cc-icon"><svg viewBox="0 0 24 24">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg></div>
+            <div>
+              <div class="cc-label">Office</div>
+              <div class="cc-val">Darbhanga, Bihar — 847201</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-box">
+          <div class="form">
+            <div class="form-row">
+              <div class="fg">
+                <label class="flabel">Full name</label>
+                <input class="finput" type="text" placeholder="Your name">
+              </div>
+              <div class="fg">
+                <label class="flabel">Phone</label>
+                <input class="finput" type="tel" placeholder="+91 XXXXX XXXXX">
+              </div>
+            </div>
+            <div class="fg">
+              <label class="flabel">Email address</label>
+              <input class="finput" type="email" placeholder="you@example.com">
+            </div>
+            <div class="fg">
+              <label class="flabel">Service needed</label>
+              <select class="fselect">
+                <option value="" disabled selected>Select a service</option>
+                <option>ITR Filing</option>
+                <option>GST Compliance</option>
+                <option>TDS Returns</option>
+                <option>Accounting & Bookkeeping</option>
+                <option>Financial Advisory</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label class="flabel">Message</label>
+              <textarea class="ftextarea" placeholder="Briefly describe your requirement…"></textarea>
+            </div>
+            <button class="fsubmit">
+              Send message
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-left">
+      <div class="nav-icon" style="width:24px;height:24px;font-size:10px;border-radius:5px;flex-shrink:0;">EA</div>
+      <span class="footer-name">Elite Associates</span>
+      <span class="footer-sep">·</span>
+      <span class="footer-sub">Taxation & Financial Consultants</span>
+    </div>
+    <div class="footer-copy">© 2026 Elite Associates</div>
+  </footer>
+
+</body>
+
+</html>
