@@ -1102,6 +1102,10 @@
               <input class="finput" id="clientEmail" type="email" placeholder="you@example.com" required autocomplete="email">
             </div>
             <div class="fg">
+              <label class="flabel" for="clientPan">PAN Number</label>
+              <input class="finput" id="clientPan" type="text" placeholder="ABCDE1234F" maxlength="10" style="text-transform: uppercase;">
+            </div>
+            <div class="fg">
               <label class="flabel" for="clientService">Service needed</label>
               <select class="fselect" id="clientService" required>
                 <option value="" disabled selected>Select a service</option>
@@ -1201,6 +1205,7 @@
         const name = sanitizeInput(document.getElementById('clientName').value.trim());
         const phone = sanitizeInput(document.getElementById('clientPhone').value.trim());
         const email = sanitizeInput(document.getElementById('clientEmail').value.trim());
+        const pan = sanitizeInput(document.getElementById('clientPan').value.trim().toUpperCase());
         const service = sanitizeInput(document.getElementById('clientService').value);
         const message = sanitizeInput(document.getElementById('clientMessage').value.trim());
 
@@ -1224,6 +1229,7 @@
               name,
               phone,
               email,
+              pan,
               service,
               message,
               status: "new",
@@ -1234,7 +1240,7 @@
             });
           } else {
             console.log("Firebase Simulated Mode. Lead Details:", {
-              name, phone, email, service, message
+              name, phone, email, pan, service, message
             });
             // Simulate net latency
             await new Promise(resolve => setTimeout(resolve, 800));

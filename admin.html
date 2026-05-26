@@ -957,6 +957,10 @@
               <div class="dr-val" id="detEmail">Email</div>
             </div>
             <div class="details-row">
+              <div class="dr-label">PAN</div>
+              <div class="dr-val" id="detPan">—</div>
+            </div>
+            <div class="details-row">
               <div class="dr-label">Received</div>
               <div class="dr-val" id="detDate">Date</div>
             </div>
@@ -1061,6 +1065,10 @@
           <input class="finput" type="email" id="mEmail" placeholder="client@example.com" required>
         </div>
         <div class="fg">
+          <label class="flabel">PAN Number</label>
+          <input class="finput" type="text" id="mPan" placeholder="ABCDE1234F" maxlength="10" style="text-transform: uppercase;">
+        </div>
+        <div class="fg">
           <label class="flabel">Service Required</label>
           <select class="fselect" id="mService" required>
             <option value="ITR Filing">ITR Filing</option>
@@ -1120,6 +1128,7 @@
         name: "Rajesh Mishra",
         phone: "+91 98451 02364",
         email: "rajesh.mishra@gmail.com",
+        pan: "BQRPM4521K",
         service: "GST Compliance",
         message: "Need regular monthly GST filing for my retail garment store in Darbhanga. Have around 150 invoices per month.",
         status: "new",
@@ -1133,6 +1142,7 @@
         name: "Shweta Sharma",
         phone: "+91 77610 99421",
         email: "shweta.s@outook.com",
+        pan: "CJDPS7832L",
         service: "ITR Filing",
         message: "Salaried employee at TCS. Need assistance filing ITR-1 with multiple Form 16s and HRA claims.",
         status: "contacted",
@@ -1146,6 +1156,7 @@
         name: "Anand Agro Industries",
         phone: "+91 91223 45871",
         email: "contact@anandagro.in",
+        pan: "AABCA9876N",
         service: "Financial Advisory",
         message: "Applying for MSME business loan. Need project reports, balance sheet audit preparation, and corporate advisory.",
         status: "progress",
@@ -1452,6 +1463,7 @@
       detPhone.parentElement.querySelector('a')?.setAttribute('href', `tel:${lead.phone}`);
       detEmail.textContent = lead.email;
       detEmail.parentElement.querySelector('a')?.setAttribute('href', `mailto:${lead.email}`);
+      document.getElementById('detPan').textContent = lead.pan || '—';
       
       const dateObj = lead.createdAt && typeof lead.createdAt.toDate === 'function' 
         ? lead.createdAt.toDate() 
@@ -1654,6 +1666,7 @@
       document.getElementById('mName').value = activeLead.name || '';
       document.getElementById('mPhone').value = activeLead.phone || '';
       document.getElementById('mEmail').value = activeLead.email || '';
+      document.getElementById('mPan').value = activeLead.pan || '';
       document.getElementById('mService').value = activeLead.service || 'ITR Filing';
       document.getElementById('mMessage').value = activeLead.message || '';
 
@@ -1702,6 +1715,7 @@
       const name = document.getElementById('mName').value.trim();
       const phone = document.getElementById('mPhone').value.trim();
       const email = document.getElementById('mEmail').value.trim();
+      const pan = document.getElementById('mPan').value.trim().toUpperCase();
       const service = document.getElementById('mService').value;
       const message = document.getElementById('mMessage').value.trim();
 
@@ -1710,6 +1724,7 @@
           name,
           phone,
           email,
+          pan,
           service,
           message,
           status: "new",
@@ -1763,6 +1778,7 @@
             lead.name = name;
             lead.phone = phone;
             lead.email = email;
+            lead.pan = pan;
             lead.service = service;
             lead.message = message;
             
@@ -1784,6 +1800,7 @@
               name,
               phone,
               email,
+              pan,
               service,
               message
             });
