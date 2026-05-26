@@ -737,13 +737,18 @@
     }
 
     /* RESPONSIVE */
+    .mobile-back-btn {
+      display: none !important;
+    }
+
     @media (max-width: 960px) {
       .stats-grid {
         grid-template-columns: repeat(2, 1fr);
       }
 
       .workspace-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1.6fr 1.2fr;
+        gap: 16px;
       }
 
       .details-panel {
@@ -751,9 +756,50 @@
       }
     }
 
+    @media (max-width: 768px) {
+      .mobile-back-btn {
+        display: inline-flex !important;
+      }
+
+      /* Hide Details pane by default on mobile phones */
+      .workspace-grid {
+        display: block !important;
+      }
+
+      .workspace-grid > .panel:first-child {
+        display: block; /* Show Inbox */
+      }
+
+      .workspace-grid > .panel:last-child {
+        display: none; /* Hide Details by default */
+      }
+
+      /* Active Mobile View Toggle */
+      body.lead-selected .workspace-grid > .panel:first-child {
+        display: none; /* Hide Inbox list */
+      }
+
+      body.lead-selected .workspace-grid > .panel:last-child {
+        display: block !important; /* Show Details pane */
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px;
+      }
+
+      .stat-card {
+        padding: 16px;
+      }
+
+      .stat-val {
+        font-size: 1.8rem;
+      }
+    }
+
     @media (max-width: 580px) {
       .stats-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
       }
 
       header {
@@ -782,19 +828,6 @@
       <h2 class="auth-title">Admin Access</h2>
       <p class="auth-sub">Enter credentials to manage your business inbox</p>
 
-      <!-- DYNAMIC FIREBASE STATUS ALERTS -->
-      <div id="setupBanner" class="config-banner" style="display: none;">
-        <div class="config-banner-title">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="12" y1="16" x2="12" y2="12"></line>
-            <line x1="12" y1="8" x2="12.01" y2="8"></line>
-          </svg>
-          Firebase Setup Mode Active
-        </div>
-        <p>To connect live database, edit <code>js/firebase-config.js</code> with keys from Firebase console. You can click <strong>Sandbox Demo Mode</strong> below to test it with pre-loaded mock leads immediately!</p>
-      </div>
-
       <form id="loginForm">
         <div class="fg">
           <label class="flabel">Email Address</label>
@@ -806,8 +839,6 @@
         </div>
         <button type="submit" class="btn btn-dark" style="margin-top: 10px;" id="loginBtn">Sign In</button>
       </form>
-
-      <button id="sandboxBtn" class="btn btn-outline" style="margin-top: 10px;">Enter Sandbox Demo Mode</button>
     </div>
   </div>
 
@@ -901,12 +932,20 @@
 
           <!-- DETAILED CARD CONTENT -->
           <div id="detailsContent" style="display: none;">
+            <button class="btn btn-outline mobile-back-btn" id="mobileBackBtn" style="margin-bottom: 16px; width: auto; padding: 6px 12px; font-size: 0.8rem;">
+              ← Back to Inbox
+            </button>
             <div class="details-header">
               <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
                 <h3 class="details-client-title" id="detName">Name</h3>
                 <span id="detBadge" class="status-badge status-new">Status</span>
               </div>
-              <div class="lc-service" id="detService">ITR Filing</div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="lc-service" id="detService">ITR Filing</div>
+                <button class="btn btn-outline" style="width: auto; padding: 4px 10px; font-size: 0.72rem;" id="editLeadBtn">
+                  Edit Client Details
+                </button>
+              </div>
             </div>
 
             <div class="details-row">
@@ -986,6 +1025,9 @@
                 </div>
               </div>
             </div>
+            <button class="btn btn-outline" style="color: #C62828; border-color: rgba(198, 40, 40, 0.2); background: rgba(198, 40, 40, 0.02); margin-top: 16px;" id="deleteLeadBtn">
+              Delete Client Record
+            </button>
           </div>
         </div>
       </div>
@@ -996,7 +1038,7 @@
   <div class="modal-overlay" id="manualLeadModal">
     <div class="modal">
       <div class="modal-header">
-        <h3 class="modal-title">New Walk-in Lead</h3>
+        <h3 class="modal-title" id="modalTitle">New Walk-in Lead</h3>
         <button class="modal-close" id="closeManualLeadBtn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -1033,7 +1075,7 @@
           <label class="flabel">Notes/Description</label>
           <textarea class="ftextarea" id="mMessage" placeholder="Consultation notes, custom business details..." style="min-height: 80px;" required></textarea>
         </div>
-        <button type="submit" class="btn btn-dark" style="margin-top: 10px;">Create Lead</button>
+        <button type="submit" class="btn btn-dark" style="margin-top: 10px;" id="modalSubmitBtn">Create Lead</button>
       </form>
     </div>
   </div>
@@ -1055,6 +1097,7 @@
       getDocs, 
       addDoc, 
       updateDoc, 
+      deleteDoc,
       onSnapshot, 
       serverTimestamp, 
       query, 
@@ -1068,6 +1111,7 @@
     let activeFilter = 'all';
     let searchQuery = '';
     let unsubscribeLeads = null;
+    let modalMode = 'create'; // 'create' or 'edit'
 
     // Prepopulate Dummy Sandbox Data
     const MOCK_LEADS = [
@@ -1153,11 +1197,11 @@
     const copyInvoiceLinkBtn = document.getElementById('copyInvoiceLinkBtn');
     const copyWhatsappBtn = document.getElementById('copyWhatsappBtn');
     const sendWhatsappBtn = document.getElementById('sendWhatsappBtn');
-
-    // INITIALIZATION SCREEN STATE
-    if (!isFirebaseConfigured) {
-      setupBanner.style.display = 'block';
-    }
+    const editLeadBtn = document.getElementById('editLeadBtn');
+    const deleteLeadBtn = document.getElementById('deleteLeadBtn');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalSubmitBtn = document.getElementById('modalSubmitBtn');
+    const mobileBackBtn = document.getElementById('mobileBackBtn');
 
     // LOGIN FORM SUBMISSION
     loginForm.addEventListener('submit', async (e) => {
@@ -1186,24 +1230,26 @@
     });
 
     // SANDBOX DEMO LAUNCHER
-    sandboxBtn.addEventListener('submit', (e) => e.preventDefault());
-    sandboxBtn.addEventListener('click', () => {
-      isSandboxMode = true;
-      demoBadge.style.display = 'inline-block';
-      avatarName.textContent = "SD";
-      profileText.textContent = "Sandbox Administrator";
-      
-      // Load mock items
-      leadsData = [...MOCK_LEADS];
-      
-      // Toggle display
-      authSection.style.display = 'none';
-      dashboardSection.style.display = 'flex';
-      
-      showToast("Entered Sandbox Mode successfully!");
-      renderStats();
-      renderLeads();
-    });
+    if (sandboxBtn) {
+      sandboxBtn.addEventListener('submit', (e) => e.preventDefault());
+      sandboxBtn.addEventListener('click', () => {
+        isSandboxMode = true;
+        demoBadge.style.display = 'inline-block';
+        avatarName.textContent = "SD";
+        profileText.textContent = "Sandbox Administrator";
+        
+        // Load mock items
+        leadsData = [...MOCK_LEADS];
+        
+        // Toggle display
+        authSection.style.display = 'none';
+        dashboardSection.style.display = 'flex';
+        
+        showToast("Entered Sandbox Mode successfully!");
+        renderStats();
+        renderLeads();
+      });
+    }
 
     // SIGN OUT FUNCTION
     logoutBtn.addEventListener('click', async () => {
@@ -1359,6 +1405,7 @@
           card.classList.add('active');
           toggleDetailsPanel(true);
           populateDetails(lead);
+          document.body.classList.add('lead-selected');
         });
 
         leadsListContainer.appendChild(card);
@@ -1393,6 +1440,7 @@
         detailsEmptyState.style.display = 'flex';
         detailsContent.style.display = 'none';
         selectedLeadId = null;
+        document.body.classList.remove('lead-selected');
       }
     }
 
@@ -1575,6 +1623,9 @@
 
     // MODAL CONTROL ACTIONS
     openManualLeadBtn.addEventListener('click', () => {
+      modalMode = 'create';
+      modalTitle.textContent = "New Walk-in Lead";
+      modalSubmitBtn.textContent = "Create Lead";
       manualLeadForm.reset();
       manualLeadModal.style.display = 'flex';
     });
@@ -1583,7 +1634,68 @@
       manualLeadModal.style.display = 'none';
     });
 
-    // MANUAL LEAD SUBMISSION
+    if (mobileBackBtn) {
+      mobileBackBtn.addEventListener('click', () => {
+        document.body.classList.remove('lead-selected');
+      });
+    }
+
+    // EDIT LEAD DETAILS ACTION
+    editLeadBtn.addEventListener('click', () => {
+      if (!selectedLeadId) return;
+      const activeLead = leadsData.find(l => l.id === selectedLeadId);
+      if (!activeLead) return;
+
+      modalMode = 'edit';
+      modalTitle.textContent = "Edit Client Details";
+      modalSubmitBtn.textContent = "Save Changes";
+
+      // Prepopulate inputs
+      document.getElementById('mName').value = activeLead.name || '';
+      document.getElementById('mPhone').value = activeLead.phone || '';
+      document.getElementById('mEmail').value = activeLead.email || '';
+      document.getElementById('mService').value = activeLead.service || 'ITR Filing';
+      document.getElementById('mMessage').value = activeLead.message || '';
+
+      manualLeadModal.style.display = 'flex';
+    });
+
+    // DELETE LEAD RECORD ACTION (D in CRUD)
+    deleteLeadBtn.addEventListener('click', async () => {
+      if (!selectedLeadId) return;
+      const activeLead = leadsData.find(l => l.id === selectedLeadId);
+      if (!activeLead) return;
+
+      const confirmDelete = confirm(`Are you sure you want to permanently delete ${activeLead.name}'s lead and billing record? This action cannot be undone.`);
+      if (!confirmDelete) return;
+
+      if (isSandboxMode) {
+        leadsData = leadsData.filter(l => l.id !== selectedLeadId);
+        showToast("Lead record deleted (Sandbox)!");
+        toggleDetailsPanel();
+        renderStats();
+        renderLeads();
+      } else {
+        try {
+          deleteLeadBtn.disabled = true;
+          deleteLeadBtn.textContent = "Deleting...";
+
+          const leadRef = doc(db, "leads", selectedLeadId);
+          await deleteDoc(leadRef);
+
+          showToast("Lead record deleted successfully!");
+          toggleDetailsPanel();
+        } catch (error) {
+          console.error("Firestore Delete Error:", error);
+          alert("Failed to delete the record from Database.");
+        } finally {
+          deleteLeadBtn.disabled = false;
+          deleteLeadBtn.textContent = "Delete Client Record";
+        }
+      }
+    });
+
+    // MANUAL LEAD SUBMISSION (Handles both C and U in CRUD)
     manualLeadForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -1593,52 +1705,99 @@
       const service = document.getElementById('mService').value;
       const message = document.getElementById('mMessage').value.trim();
 
-      const newLead = {
-        name,
-        phone,
-        email,
-        service,
-        message,
-        status: "new",
-        amount: 0,
-        paymentLink: "",
-        paymentStatus: "unpaid"
-      };
-
-      if (isSandboxMode) {
-        const mockId = "mock_lead_" + Date.now();
-        const fullLead = {
-          id: mockId,
-          ...newLead,
-          createdAt: { toDate: () => new Date() }
+      if (modalMode === 'create') {
+        const newLead = {
+          name,
+          phone,
+          email,
+          service,
+          message,
+          status: "new",
+          amount: 0,
+          paymentLink: "",
+          paymentStatus: "unpaid"
         };
-        
-        leadsData.unshift(fullLead);
-        renderStats();
-        renderLeads();
-        
-        manualLeadModal.style.display = 'none';
-        showToast("Offline lead added (Sandbox)");
-      } else {
-        try {
-          const submitBtn = manualLeadForm.querySelector('button[type="submit"]');
-          submitBtn.disabled = true;
-          submitBtn.textContent = "Creating...";
 
-          await addDoc(collection(db, "leads"), {
+        if (isSandboxMode) {
+          const mockId = "mock_lead_" + Date.now();
+          const fullLead = {
+            id: mockId,
             ...newLead,
-            createdAt: serverTimestamp()
-          });
-
+            createdAt: { toDate: () => new Date() }
+          };
+          
+          leadsData.unshift(fullLead);
+          renderStats();
+          renderLeads();
+          
           manualLeadModal.style.display = 'none';
-          showToast("Walk-in lead created successfully!");
-        } catch (error) {
-          console.error("Error creating walk-in lead:", error);
-          alert("Could not save manual lead to Firebase.");
-        } finally {
-          const submitBtn = manualLeadForm.querySelector('button[type="submit"]');
-          submitBtn.disabled = false;
-          submitBtn.textContent = "Create Lead";
+          showToast("Offline lead added (Sandbox)");
+        } else {
+          try {
+            const submitBtn = document.getElementById('modalSubmitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Creating...";
+
+            await addDoc(collection(db, "leads"), {
+              ...newLead,
+              createdAt: serverTimestamp()
+            });
+
+            manualLeadModal.style.display = 'none';
+            showToast("Walk-in lead created successfully!");
+          } catch (error) {
+            console.error("Error creating walk-in lead:", error);
+            alert("Could not save manual lead to Firebase.");
+          } finally {
+            const submitBtn = document.getElementById('modalSubmitBtn');
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Create Lead";
+          }
+        }
+      } else if (modalMode === 'edit') {
+        if (!selectedLeadId) return;
+
+        if (isSandboxMode) {
+          const lead = leadsData.find(l => l.id === selectedLeadId);
+          if (lead) {
+            lead.name = name;
+            lead.phone = phone;
+            lead.email = email;
+            lead.service = service;
+            lead.message = message;
+            
+            populateDetails(lead);
+            renderStats();
+            renderLeads();
+            
+            manualLeadModal.style.display = 'none';
+            showToast("Details updated (Sandbox)");
+          }
+        } else {
+          try {
+            const submitBtn = document.getElementById('modalSubmitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Saving...";
+
+            const leadRef = doc(db, "leads", selectedLeadId);
+            await updateDoc(leadRef, {
+              name,
+              phone,
+              email,
+              service,
+              message
+            });
+
+            manualLeadModal.style.display = 'none';
+            showToast("Client details updated successfully!");
+          } catch (error) {
+            console.error("Error updating client details:", error);
+            alert("Could not update lead in Firebase.");
+          } finally {
+            const submitBtn = document.getElementById('modalSubmitBtn');
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Save Changes";
+          }
         }
       }
     });
