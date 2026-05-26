@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elite Associates — Admin Portal</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #F5F0E8;
+      --surface: #FDFAF5;
+      --navy: #1A3A5C;
+      --navy-soft: #2A4A6C;
+      --gold: #C9A84C;
+      --gold-soft: rgba(201, 168, 76, 0.15);
+      --ink: #1C1C1C;
+      --ink-2: #4A4A4A;
+      --ink-3: #8A8A8A;
+      --border: rgba(26, 58, 92, 0.1);
+      --border-strong: rgba(26, 58, 92, 0.18);
+      --white: #FFFFFF;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --success: #2E7D32;
+      --success-soft: rgba(46, 125, 50, 0.1);
+      --warning: #EF6C00;
+      --warning-soft: rgba(239, 108, 0, 0.1);
+    }
+
+    body {
+      font-family: 'Instrument Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* AUTH SCREEN */
+    .auth-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .auth-card {
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      padding: 40px 32px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 12px 32px rgba(26, 58, 92, 0.08);
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .auth-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .auth-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--navy);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Instrument Serif', serif;
+      font-size: 16px;
+      color: var(--gold);
+    }
+
+    .auth-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--navy);
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .auth-sub {
+      text-align: center;
+      color: var(--ink-3);
+      font-size: 0.88rem;
+      margin-bottom: 32px;
+    }
+
+    .fg {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+
+    .flabel {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--navy);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .finput,
+    .fselect,
+    .ftextarea {
+      padding: 11px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 0.88rem;
+      color: var(--ink);
+      outline: none;
+      width: 100%;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .finput:focus,
+    .fselect:focus,
+    .ftextarea:focus {
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(26, 58, 92, 0.08);
+      background: var(--white);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.15s;
+    }
+
+    .btn-dark {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .btn-dark:hover {
+      background: var(--navy-soft);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--navy);
+      border: 1px solid var(--border-strong);
+    }
+
+    .btn-outline:hover {
+      background: var(--border);
+    }
+
+    /* STATUS BANNER FOR CONFIG */
+    .config-banner {
+      background: #FFF3E0;
+      border: 1px solid #FFE0B2;
+      color: #E65100;
+      padding: 16px 24px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.85rem;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .config-banner-title {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* DASHBOARD LAYOUT */
+    .dashboard {
+      display: none; /* Controlled by JS */
+      min-height: 100vh;
+      flex-direction: column;
+    }
+
+    header {
+      background: rgba(253, 250, 245, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px max(24px, 4vw);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-text {
+      font-weight: 600;
+      color: var(--navy);
+      font-size: 0.95rem;
+    }
+
+    .badge-demo {
+      font-size: 0.65rem;
+      background: var(--gold-soft);
+      border: 1px solid rgba(201, 168, 76, 0.4);
+      color: #8A6A20;
+      padding: 2px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      background: var(--gold-soft);
+      color: #8A6A20;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.82rem;
+    }
+
+    .btn-logout {
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      width: auto;
+    }
+
+    main {
+      flex: 1;
+      padding: 32px max(24px, 4vw);
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* STATS SUMMARY cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: all 0.2s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(26, 58, 92, 0.04);
+      border-color: var(--border-strong);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--ink-3);
+      text-transform: uppercase;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .stat-val {
+      font-family: 'Instrument Serif', serif;
+      font-size: 2.2rem;
+      line-height: 1.1;
+      color: var(--navy);
+      font-weight: 400;
+    }
+
+    .stat-desc {
+      font-size: 0.72rem;
+      color: var(--ink-3);
+      margin-top: 4px;
+    }
+
+    /* DASHBOARD WORKSPACE */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .panel-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.6rem;
+      color: var(--navy);
+      font-weight: 400;
+    }
+
+    /* LEAD LIST & CONTROLS */
+    .panel-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .filter-btn-group {
+      display: flex;
+      background: var(--bg);
+      padding: 3px;
+      border-radius: var(--radius-sm);
+      overflow-x: auto;
+    }
+
+    .filter-btn {
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      color: var(--ink-2);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+
+    .filter-btn.active {
+      background: var(--surface);
+      color: var(--navy);
+      box-shadow: 0 2px 6px rgba(26, 58, 92, 0.05);
+    }
+
+    .leads-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 520px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .lead-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.15s ease;
+    }
+
+    .lead-card:hover {
+      border-color: var(--navy-soft);
+      background: #FDFBFA;
+    }
+
+    .lead-card.active {
+      border-color: var(--navy);
+      background: rgba(26, 58, 92, 0.02);
+      box-shadow: inset 3px 0 0 var(--gold);
+    }
+
+    .lc-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .lc-name {
+      font-weight: 600;
+      color: var(--navy);
+      font-size: 0.88rem;
+    }
+
+    .lc-meta {
+      font-size: 0.75rem;
+      color: var(--ink-3);
+    }
+
+    .lc-service {
+      font-size: 0.78rem;
+      color: var(--gold);
+      font-weight: 500;
+      background: var(--gold-soft);
+      padding: 2px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      width: fit-content;
+    }
+
+    .lc-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .lc-date {
+      font-size: 0.72rem;
+      color: var(--ink-3);
+    }
+
+    .status-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-new {
+      background: #E3F2FD;
+      color: #1E88E5;
+    }
+
+    .status-contacted {
+      background: #E8F5E9;
+      color: #43A047;
+    }
+
+    .status-progress {
+      background: #FFF3E0;
+      color: #FB8C00;
+    }
+
+    .status-paid {
+      background: var(--success-soft);
+      color: var(--success);
+    }
+
+    .status-cancelled {
+      background: #ECEFF1;
+      color: #78909C;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 64px 20px;
+      color: var(--ink-3);
+    }
+
+    .empty-state svg {
+      width: 48px;
+      height: 48px;
+      stroke: var(--ink-3);
+      margin-bottom: 16px;
+      opacity: 0.6;
+    }
+
+    /* DETAILS WORKSPACE PANEL */
+    .details-panel {
+      position: sticky;
+      top: 90px;
+    }
+
+    .details-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+    }
+
+    .details-client-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.8rem;
+      color: var(--navy);
+      margin-bottom: 4px;
+      font-weight: 400;
+    }
+
+    .details-row {
+      display: flex;
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+    }
+
+    .dr-label {
+      width: 90px;
+      font-weight: 500;
+      color: var(--ink-3);
+      flex-shrink: 0;
+    }
+
+    .dr-val {
+      color: var(--ink);
+    }
+
+    .dr-val a {
+      color: var(--navy);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .dr-val a:hover {
+      text-decoration: underline;
+    }
+
+    .details-message-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      font-size: 0.82rem;
+      color: var(--ink-2);
+      margin-top: 16px;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+
+    .billing-section {
+      background: #FDFBFA;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      margin-top: 24px;
+    }
+
+    .billing-title {
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .billing-title svg {
+      stroke: var(--gold);
+    }
+
+    .billing-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .share-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .btn-share {
+      padding: 8px 14px;
+      font-size: 0.8rem;
+      flex: 1;
+    }
+
+    .btn-whatsapp {
+      background: #25D366;
+      color: white;
+    }
+
+    .btn-whatsapp:hover {
+      background: #128C7E;
+      transform: translateY(-1px);
+    }
+
+    /* MODALS */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(26, 58, 92, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 50;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 480px;
+      padding: 32px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+      animation: fadeUp 0.3s ease both;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .modal-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.8rem;
+      color: var(--navy);
+      font-weight: 400;
+    }
+
+    .modal-close {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: var(--ink-3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-close:hover {
+      color: var(--ink);
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--navy);
+      color: var(--white);
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      z-index: 100;
+      display: none;
+      animation: slideIn 0.35s ease forwards;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 960px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .details-panel {
+        position: static;
+      }
+    }
+
+    @media (max-width: 580px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .header-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- AUTHENTICATION SECTION (LOGIN) -->
+  <div class="auth-container" id="authSection">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="auth-icon">EA</div>
+        <span class="logo-text">Elite Associates</span>
+      </div>
+      <h2 class="auth-title">Admin Access</h2>
+      <p class="auth-sub">Enter credentials to manage your business inbox</p>
+
+      <!-- DYNAMIC FIREBASE STATUS ALERTS -->
+      <div id="setupBanner" class="config-banner" style="display: none;">
+        <div class="config-banner-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          Firebase Setup Mode Active
+        </div>
+        <p>To connect live database, edit <code>js/firebase-config.js</code> with keys from Firebase console. You can click <strong>Sandbox Demo Mode</strong> below to test it with pre-loaded mock leads immediately!</p>
+      </div>
+
+      <form id="loginForm">
+        <div class="fg">
+          <label class="flabel">Email Address</label>
+          <input class="finput" type="email" id="loginEmail" placeholder="kumaravinash@elite.com" required>
+        </div>
+        <div class="fg">
+          <label class="flabel">Password</label>
+          <input class="finput" type="password" id="loginPassword" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-dark" style="margin-top: 10px;" id="loginBtn">Sign In</button>
+      </form>
+
+      <button id="sandboxBtn" class="btn btn-outline" style="margin-top: 10px;">Enter Sandbox Demo Mode</button>
+    </div>
+  </div>
+
+  <!-- MAIN DASHBOARD SYSTEM -->
+  <div class="dashboard" id="dashboardSection">
+    <!-- HEADER -->
+    <header>
+      <div class="header-left">
+        <div class="auth-icon" style="width:28px; height:28px; font-size:12px; border-radius:5px;">EA</div>
+        <span class="logo-text">Elite Associates Admin</span>
+        <span id="demoBadge" class="badge-demo" style="display: none;">Sandbox Demo</span>
+      </div>
+      <div class="header-right">
+        <div class="user-profile">
+          <div class="user-avatar" id="avatarName">AK</div>
+          <span style="font-weight: 500; font-size:0.85rem;" id="profileText">Avinash Kumar</span>
+        </div>
+        <button class="btn btn-outline btn-logout" id="logoutBtn">Sign Out</button>
+      </div>
+    </header>
+
+    <!-- CONTENT BODY -->
+    <main>
+      <!-- ANALYTICS CARDS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Leads</div>
+          <div class="stat-val" id="statLeads">0</div>
+          <div class="stat-desc">Submissions from contact form</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Collected Payments</div>
+          <div class="stat-val" id="statCollected">₹0</div>
+          <div class="stat-desc" id="statCountPaid">0 Invoices Paid</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pending Payments</div>
+          <div class="stat-val" id="statPending">₹0</div>
+          <div class="stat-desc" id="statCountPending">0 Invoices Pending</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Billing Success</div>
+          <div class="stat-val" id="statSuccessRate">0%</div>
+          <div class="stat-desc">Paid Invoices ratio</div>
+        </div>
+      </div>
+
+      <!-- WORKSPACE GRID -->
+      <div class="workspace-grid">
+        <!-- LEFT PANEL: LEADS LIST -->
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Inbox Requests</h2>
+            <button class="btn btn-dark" style="width: auto; padding: 8px 16px; font-size:0.8rem;" id="openManualLeadBtn">
+              + New Walk-in Lead
+            </button>
+          </div>
+
+          <div class="panel-controls">
+            <div class="search-box">
+              <input type="text" class="finput" id="searchLead" placeholder="Search by name, phone..." style="padding: 7px 12px; font-size:0.8rem;">
+            </div>
+            <div class="filter-btn-group">
+              <button class="filter-btn active" data-filter="all">All</button>
+              <button class="filter-btn" data-filter="new">New</button>
+              <button class="filter-btn" data-filter="contacted">Contacted</button>
+              <button class="filter-btn" data-filter="progress">Progress</button>
+              <button class="filter-btn" data-filter="paid">Paid</button>
+            </div>
+          </div>
+
+          <!-- DYNAMIC LEADS CONTAINER -->
+          <div class="leads-list" id="leadsListContainer">
+            <!-- Filled dynamically by JS -->
+          </div>
+        </div>
+
+        <!-- RIGHT PANEL: DETAILED WORKSPACE & INVOICING -->
+        <div class="panel details-panel" id="detailsPanel">
+          <div class="empty-state" id="detailsEmptyState">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            <p style="font-weight: 500; font-size: 0.95rem; color: var(--navy); margin-bottom: 4px;">No Lead Selected</p>
+            <p style="font-size: 0.78rem;">Select a card from the inbox on the left to manage their workflow and assign Cashfree payment links.</p>
+          </div>
+
+          <!-- DETAILED CARD CONTENT -->
+          <div id="detailsContent" style="display: none;">
+            <div class="details-header">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+                <h3 class="details-client-title" id="detName">Name</h3>
+                <span id="detBadge" class="status-badge status-new">Status</span>
+              </div>
+              <div class="lc-service" id="detService">ITR Filing</div>
+            </div>
+
+            <div class="details-row">
+              <div class="dr-label">Phone</div>
+              <div class="dr-val" id="detPhone">Phone</div>
+            </div>
+            <div class="details-row">
+              <div class="dr-label">Email</div>
+              <div class="dr-val" id="detEmail">Email</div>
+            </div>
+            <div class="details-row">
+              <div class="dr-label">Received</div>
+              <div class="dr-val" id="detDate">Date</div>
+            </div>
+
+            <div class="dr-label" style="margin-top: 16px; font-size:0.75rem;">Client Message</div>
+            <div class="details-message-box" id="detMessage">
+              Description...
+            </div>
+
+            <!-- WORKFLOW STATE -->
+            <div class="fg" style="margin-top: 20px;">
+              <label class="flabel">Update Lead Status</label>
+              <select class="fselect" id="detStatusSelect">
+                <option value="new">New Lead</option>
+                <option value="contacted">Contacted</option>
+                <option value="progress">In Progress</option>
+                <option value="paid">Payment Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+
+            <!-- SECURE PAYMENT COLLECTION SECTION (CASHFREE INTEGRATION) -->
+            <div class="billing-section">
+              <div class="billing-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
+                  <line x1="2" y1="10" x2="22" y2="10"></line>
+                </svg>
+                Cashfree Digital Invoicing
+              </div>
+              
+              <div class="billing-actions">
+                <div class="fg" style="margin-bottom: 0;">
+                  <label class="flabel">Billable Amount (₹)</label>
+                  <input class="finput" type="number" id="billAmount" placeholder="e.g. 2500" min="0">
+                </div>
+
+                <div class="fg" style="margin-bottom: 0;">
+                  <label class="flabel">Cashfree Payment Link</label>
+                  <input class="finput" type="url" id="billCashfreeLink" placeholder="https://link.cashfree.com/...">
+                  <span style="font-size:0.7rem; color:var(--ink-3); margin-top:2px;">
+                    Generate link in <strong>Cashfree Dashboard > Payment Links</strong> and paste here.
+                  </span>
+                </div>
+
+                <button class="btn btn-dark" style="margin-top: 6px;" id="saveBillingBtn">Save & Generate Invoice</button>
+              </div>
+
+              <!-- CLIENT BILLING LINK (GENERATED AFTER LINK PUSH) -->
+              <div id="clientShareArea" style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 16px; display: none;">
+                <div class="fg">
+                  <label class="flabel">Elite Custom Billing Portal Link</label>
+                  <div style="display:flex; gap: 8px;">
+                    <input class="finput" type="text" id="generatedInvoiceLink" readonly style="background:#ECEFF1; font-size:0.75rem;">
+                    <button class="btn btn-dark" id="copyInvoiceLinkBtn" style="width:auto; padding:0 14px;">Copy</button>
+                  </div>
+                </div>
+
+                <div class="share-row">
+                  <button class="btn btn-share btn-outline" id="copyWhatsappBtn">Copy Text</button>
+                  <button class="btn btn-share btn-whatsapp" id="sendWhatsappBtn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 4px;">
+                      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.003 5.37 5.378.002 12.012 0c3.215.001 6.237 1.253 8.506 3.522 2.27 2.269 3.521 5.29 3.52 8.505-.003 6.643-5.378 12.011-12.013 12.012-2.006-.001-3.975-.5-5.757-1.451L0 24zm6.59-4.846c1.684.997 3.56 1.523 5.42 1.524 5.467.002 9.916-4.444 9.919-9.915.002-2.651-1.03-5.144-2.905-7.02C17.156 1.867 14.665.836 12.012.835 6.545.835 2.099 5.28 2.097 10.748c-.001 1.932.507 3.821 1.472 5.518l-.997 3.637 3.73-.978l.348.207z"/>
+                    </svg>WhatsApp Client
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL: MANUAL LEAD CREATION -->
+  <div class="modal-overlay" id="manualLeadModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">New Walk-in Lead</h3>
+        <button class="modal-close" id="closeManualLeadBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <form id="manualLeadForm">
+        <div class="fg">
+          <label class="flabel">Full Name</label>
+          <input class="finput" type="text" id="mName" placeholder="Client name" required>
+        </div>
+        <div class="fg">
+          <label class="flabel">Phone Number</label>
+          <input class="finput" type="tel" id="mPhone" placeholder="+91 XXXXX XXXXX" required>
+        </div>
+        <div class="fg">
+          <label class="flabel">Email Address</label>
+          <input class="finput" type="email" id="mEmail" placeholder="client@example.com" required>
+        </div>
+        <div class="fg">
+          <label class="flabel">Service Required</label>
+          <select class="fselect" id="mService" required>
+            <option value="ITR Filing">ITR Filing</option>
+            <option value="GST Compliance">GST Compliance</option>
+            <option value="TDS Returns">TDS Returns</option>
+            <option value="Accounting & Bookkeeping">Accounting & Bookkeeping</option>
+            <option value="Financial Advisory">Financial Advisory</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="flabel">Notes/Description</label>
+          <textarea class="ftextarea" id="mMessage" placeholder="Consultation notes, custom business details..." style="min-height: 80px;" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-dark" style="margin-top: 10px;">Create Lead</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div class="toast" id="toastBox">Invoice Updated!</div>
+
+  <!-- JS CONTROLLER MODULE -->
+  <script type="module">
+    import { auth, db, isFirebaseConfigured } from './js/firebase-config.js';
+    import { 
+      signInWithEmailAndPassword, 
+      signOut, 
+      onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { 
+      collection, 
+      doc, 
+      getDocs, 
+      addDoc, 
+      updateDoc, 
+      onSnapshot, 
+      serverTimestamp, 
+      query, 
+      orderBy 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // Setup global dashboard states
+    let leadsData = [];
+    let selectedLeadId = null;
+    let isSandboxMode = false;
+    let activeFilter = 'all';
+    let searchQuery = '';
+    let unsubscribeLeads = null;
+
+    // Prepopulate Dummy Sandbox Data
+    const MOCK_LEADS = [
+      {
+        id: "mock_lead_1",
+        name: "Rajesh Mishra",
+        phone: "+91 98451 02364",
+        email: "rajesh.mishra@gmail.com",
+        service: "GST Compliance",
+        message: "Need regular monthly GST filing for my retail garment store in Darbhanga. Have around 150 invoices per month.",
+        status: "new",
+        amount: 0,
+        paymentLink: "",
+        paymentStatus: "unpaid",
+        createdAt: { toDate: () => new Date(Date.now() - 3600000 * 2) } // 2 hours ago
+      },
+      {
+        id: "mock_lead_2",
+        name: "Shweta Sharma",
+        phone: "+91 77610 99421",
+        email: "shweta.s@outook.com",
+        service: "ITR Filing",
+        message: "Salaried employee at TCS. Need assistance filing ITR-1 with multiple Form 16s and HRA claims.",
+        status: "contacted",
+        amount: 1500,
+        paymentLink: "https://link.cashfree.com/mock_pay_1",
+        paymentStatus: "unpaid",
+        createdAt: { toDate: () => new Date(Date.now() - 3600000 * 24) } // 1 day ago
+      },
+      {
+        id: "mock_lead_3",
+        name: "Anand Agro Industries",
+        phone: "+91 91223 45871",
+        email: "contact@anandagro.in",
+        service: "Financial Advisory",
+        message: "Applying for MSME business loan. Need project reports, balance sheet audit preparation, and corporate advisory.",
+        status: "progress",
+        amount: 8500,
+        paymentLink: "https://link.cashfree.com/mock_pay_2",
+        paymentStatus: "paid",
+        createdAt: { toDate: () => new Date(Date.now() - 3600000 * 72) } // 3 days ago
+      }
+    ];
+
+    // DOM ELEMENTS
+    const authSection = document.getElementById('authSection');
+    const dashboardSection = document.getElementById('dashboardSection');
+    const setupBanner = document.getElementById('setupBanner');
+    const loginForm = document.getElementById('loginForm');
+    const sandboxBtn = document.getElementById('sandboxBtn');
+    const demoBadge = document.getElementById('demoBadge');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const toastBox = document.getElementById('toastBox');
+    
+    // Manual Lead Elements
+    const openManualLeadBtn = document.getElementById('openManualLeadBtn');
+    const closeManualLeadBtn = document.getElementById('closeManualLeadBtn');
+    const manualLeadModal = document.getElementById('manualLeadModal');
+    const manualLeadForm = document.getElementById('manualLeadForm');
+
+    // Workspace Elements
+    const searchLead = document.getElementById('searchLead');
+    const leadsListContainer = document.getElementById('leadsListContainer');
+    
+    // Details Elements
+    const detailsEmptyState = document.getElementById('detailsEmptyState');
+    const detailsContent = document.getElementById('detailsContent');
+    const detName = document.getElementById('detName');
+    const detBadge = document.getElementById('detBadge');
+    const detService = document.getElementById('detService');
+    const detPhone = document.getElementById('detPhone');
+    const detEmail = document.getElementById('detEmail');
+    const detDate = document.getElementById('detDate');
+    const detMessage = document.getElementById('detMessage');
+    const detStatusSelect = document.getElementById('detStatusSelect');
+    
+    // Billing Elements
+    const billAmount = document.getElementById('billAmount');
+    const billCashfreeLink = document.getElementById('billCashfreeLink');
+    const saveBillingBtn = document.getElementById('saveBillingBtn');
+    const clientShareArea = document.getElementById('clientShareArea');
+    const generatedInvoiceLink = document.getElementById('generatedInvoiceLink');
+    const copyInvoiceLinkBtn = document.getElementById('copyInvoiceLinkBtn');
+    const copyWhatsappBtn = document.getElementById('copyWhatsappBtn');
+    const sendWhatsappBtn = document.getElementById('sendWhatsappBtn');
+
+    // INITIALIZATION SCREEN STATE
+    if (!isFirebaseConfigured) {
+      setupBanner.style.display = 'block';
+    }
+
+    // LOGIN FORM SUBMISSION
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const loginBtn = document.getElementById('loginBtn');
+
+      if (!isFirebaseConfigured) {
+        alert("Firebase config keys are not loaded yet! Please edit js/firebase-config.js or use Sandbox Demo Mode.");
+        return;
+      }
+
+      loginBtn.disabled = true;
+      loginBtn.textContent = "Authenticating...";
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (error) {
+        console.error("Login Error:", error);
+        alert("Invalid credentials. Please verify your Email and Password.");
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Sign In";
+      }
+    });
+
+    // SANDBOX DEMO LAUNCHER
+    sandboxBtn.addEventListener('submit', (e) => e.preventDefault());
+    sandboxBtn.addEventListener('click', () => {
+      isSandboxMode = true;
+      demoBadge.style.display = 'inline-block';
+      avatarName.textContent = "SD";
+      profileText.textContent = "Sandbox Administrator";
+      
+      // Load mock items
+      leadsData = [...MOCK_LEADS];
+      
+      // Toggle display
+      authSection.style.display = 'none';
+      dashboardSection.style.display = 'flex';
+      
+      showToast("Entered Sandbox Mode successfully!");
+      renderStats();
+      renderLeads();
+    });
+
+    // SIGN OUT FUNCTION
+    logoutBtn.addEventListener('click', async () => {
+      if (isSandboxMode) {
+        isSandboxMode = false;
+        demoBadge.style.display = 'none';
+        avatarName.textContent = "AK";
+        profileText.textContent = "Avinash Kumar";
+        authSection.style.display = 'flex';
+        dashboardSection.style.display = 'none';
+        selectedLeadId = null;
+        leadsData = [];
+        leadsListContainer.innerHTML = '';
+        toggleDetailsPanel();
+      } else {
+        try {
+          await signOut(auth);
+        } catch (error) {
+          console.error("Logout Error:", error);
+        }
+      }
+    });
+
+    // CHECK AUTH STATE
+    if (isFirebaseConfigured && auth) {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // Logged in
+          authSection.style.display = 'none';
+          dashboardSection.style.display = 'flex';
+          initLiveSync();
+        } else {
+          // Logged out
+          authSection.style.display = 'flex';
+          dashboardSection.style.display = 'none';
+          if (unsubscribeLeads) {
+            unsubscribeLeads();
+            unsubscribeLeads = null;
+          }
+          selectedLeadId = null;
+          leadsData = [];
+          toggleDetailsPanel();
+        }
+      });
+    }
+
+    // INIT REAL-TIME FIRESTORE DATA SYNC
+    function initLiveSync() {
+      if (!isFirebaseConfigured || !db) return;
+
+      const leadsRef = collection(db, "leads");
+      const leadsQuery = query(leadsRef, orderBy("createdAt", "desc"));
+
+      unsubscribeLeads = onSnapshot(leadsQuery, (snapshot) => {
+        leadsData = [];
+        snapshot.forEach((docSnap) => {
+          leadsData.push({
+            id: docSnap.id,
+            ...docSnap.data()
+          });
+        });
+        
+        renderStats();
+        renderLeads();
+        
+        // Update active lead data if selected
+        if (selectedLeadId) {
+          const freshLead = leadsData.find(l => l.id === selectedLeadId);
+          if (freshLead) {
+            populateDetails(freshLead);
+          }
+        }
+      }, (error) => {
+        console.error("Firestore Listen Error:", error);
+      });
+    }
+
+    // RENDER METRIC CARDS
+    function renderStats() {
+      const total = leadsData.length;
+      
+      const paidLeads = leadsData.filter(l => l.paymentStatus === 'paid');
+      const totalCollected = paidLeads.reduce((sum, l) => sum + (parseFloat(l.amount) || 0), 0);
+      
+      const pendingLeads = leadsData.filter(l => l.paymentStatus === 'unpaid' && l.amount > 0 && l.paymentLink);
+      const totalPending = pendingLeads.reduce((sum, l) => sum + (parseFloat(l.amount) || 0), 0);
+
+      const billingSuccessRatio = totalCollected + totalPending > 0
+        ? Math.round((paidLeads.length / (paidLeads.length + pendingLeads.length)) * 100)
+        : 0;
+
+      // Update DOM
+      document.getElementById('statLeads').textContent = total;
+      document.getElementById('statCollected').textContent = `₹${totalCollected.toLocaleString('en-IN')}`;
+      document.getElementById('statCountPaid').textContent = `${paidLeads.length} Invoices Paid`;
+      document.getElementById('statPending').textContent = `₹${totalPending.toLocaleString('en-IN')}`;
+      document.getElementById('statCountPending').textContent = `${pendingLeads.length} Invoices Active`;
+      document.getElementById('statSuccessRate').textContent = `${billingSuccessRatio}%`;
+    }
+
+    // RENDER INBOX LEADS WITH FILTER & SEARCH
+    function renderLeads() {
+      leadsListContainer.innerHTML = '';
+      
+      const filtered = leadsData.filter(lead => {
+        // Filter tabs
+        if (activeFilter === 'new' && lead.status !== 'new') return false;
+        if (activeFilter === 'contacted' && lead.status !== 'contacted') return false;
+        if (activeFilter === 'progress' && lead.status !== 'progress') return false;
+        if (activeFilter === 'paid' && lead.paymentStatus !== 'paid') return false;
+        
+        // Search bar filter
+        if (searchQuery) {
+          const matchString = `${lead.name} ${lead.phone} ${lead.email} ${lead.service}`.toLowerCase();
+          return matchString.includes(searchQuery);
+        }
+        
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        leadsListContainer.innerHTML = `
+          <div class="empty-state" style="padding: 32px 0;">
+            <p style="font-size:0.82rem;">No matching requests found.</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(lead => {
+        const dateObj = lead.createdAt && typeof lead.createdAt.toDate === 'function' 
+          ? lead.createdAt.toDate() 
+          : new Date();
+        const dateString = dateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+
+        const card = document.createElement('div');
+        card.className = `lead-card ${selectedLeadId === lead.id ? 'active' : ''}`;
+        card.innerHTML = `
+          <div class="lc-details">
+            <span class="lc-name">${lead.name}</span>
+            <span class="lc-service">${lead.service}</span>
+            <span class="lc-meta">${lead.phone}</span>
+          </div>
+          <div class="lc-right">
+            <span class="lc-date">${dateString}</span>
+            <span class="status-badge ${getStatusClass(lead.status, lead.paymentStatus)}">${getStatusLabel(lead.status, lead.paymentStatus)}</span>
+          </div>
+        `;
+
+        card.addEventListener('click', () => {
+          selectedLeadId = lead.id;
+          document.querySelectorAll('.lead-card').forEach(c => c.classList.remove('active'));
+          card.classList.add('active');
+          toggleDetailsPanel(true);
+          populateDetails(lead);
+        });
+
+        leadsListContainer.appendChild(card);
+      });
+    }
+
+    // MAP WORKFLOW STATUS LABELS AND STYLES
+    function getStatusClass(status, payStatus) {
+      if (payStatus === 'paid') return 'status-paid';
+      if (status === 'new') return 'status-new';
+      if (status === 'contacted') return 'status-contacted';
+      if (status === 'progress') return 'status-progress';
+      if (status === 'cancelled') return 'status-cancelled';
+      return '';
+    }
+
+    function getStatusLabel(status, payStatus) {
+      if (payStatus === 'paid') return 'PAID';
+      if (status === 'new') return 'NEW';
+      if (status === 'contacted') return 'CONTACTED';
+      if (status === 'progress') return 'PROGRESS';
+      if (status === 'cancelled') return 'CANCELLED';
+      return status;
+    }
+
+    // TOGGLE CORRESPONDING VIEWS IN DETAIL PANEL
+    function toggleDetailsPanel(hasSelection = false) {
+      if (hasSelection) {
+        detailsEmptyState.style.display = 'none';
+        detailsContent.style.display = 'block';
+      } else {
+        detailsEmptyState.style.display = 'flex';
+        detailsContent.style.display = 'none';
+        selectedLeadId = null;
+      }
+    }
+
+    // POPULATE SELECTED LEAD METRICS
+    function populateDetails(lead) {
+      detName.textContent = lead.name;
+      detService.textContent = lead.service;
+      detPhone.textContent = lead.phone;
+      detPhone.parentElement.querySelector('a')?.setAttribute('href', `tel:${lead.phone}`);
+      detEmail.textContent = lead.email;
+      detEmail.parentElement.querySelector('a')?.setAttribute('href', `mailto:${lead.email}`);
+      
+      const dateObj = lead.createdAt && typeof lead.createdAt.toDate === 'function' 
+        ? lead.createdAt.toDate() 
+        : new Date();
+      detDate.textContent = dateObj.toLocaleDateString('en-IN', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      detMessage.textContent = lead.message || "(No message contents provided)";
+      detStatusSelect.value = lead.status;
+
+      // Status Badge Style matching
+      detBadge.className = `status-badge ${getStatusClass(lead.status, lead.paymentStatus)}`;
+      detBadge.textContent = getStatusLabel(lead.status, lead.paymentStatus);
+
+      // Invoicing Inputs
+      billAmount.value = lead.amount || '';
+      billCashfreeLink.value = lead.paymentLink || '';
+
+      // Generated Portal Link visibility logic
+      if (lead.paymentLink && lead.amount > 0) {
+        clientShareArea.style.display = 'block';
+        const billingURL = `${window.location.origin}/pay.html?id=${lead.id}`;
+        generatedInvoiceLink.value = billingURL;
+      } else {
+        clientShareArea.style.display = 'none';
+      }
+    }
+
+    // SEARCH & FILTER ACTION TRIGGERS
+    searchLead.addEventListener('input', (e) => {
+      searchQuery = e.target.value.toLowerCase().trim();
+      renderLeads();
+    });
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.filter;
+        renderLeads();
+      });
+    });
+
+    // STATUS CHANGE ACTION
+    detStatusSelect.addEventListener('change', async (e) => {
+      const selectedStatus = e.target.value;
+      if (!selectedLeadId) return;
+
+      let payStatusUpdate = {};
+      if (selectedStatus === 'paid') {
+        payStatusUpdate = { paymentStatus: 'paid' };
+      }
+
+      if (isSandboxMode) {
+        const lead = leadsData.find(l => l.id === selectedLeadId);
+        if (lead) {
+          lead.status = selectedStatus;
+          if (selectedStatus === 'paid') lead.paymentStatus = 'paid';
+          populateDetails(lead);
+          renderLeads();
+          renderStats();
+          showToast("Status updated (Sandbox)");
+        }
+      } else {
+        try {
+          const leadRef = doc(db, "leads", selectedLeadId);
+          await updateDoc(leadRef, {
+            status: selectedStatus,
+            ...payStatusUpdate
+          });
+          showToast("Lead status updated!");
+        } catch (error) {
+          console.error("Firestore Update Error:", error);
+          alert("Failed to update status in Database.");
+        }
+      }
+    });
+
+    // SAVE BILLING DETAILS ACTION
+    saveBillingBtn.addEventListener('click', async () => {
+      if (!selectedLeadId) return;
+
+      const amt = parseFloat(billAmount.value) || 0;
+      const link = billCashfreeLink.value.trim();
+
+      if (amt <= 0) {
+        alert("Please enter a valid billable invoice amount (greater than ₹0).");
+        return;
+      }
+      if (!link.startsWith("http")) {
+        alert("Please paste a valid Cashfree payment link (starting with http:// or https://).");
+        return;
+      }
+
+      if (isSandboxMode) {
+        const lead = leadsData.find(l => l.id === selectedLeadId);
+        if (lead) {
+          lead.amount = amt;
+          lead.paymentLink = link;
+          populateDetails(lead);
+          renderLeads();
+          renderStats();
+          showToast("Billing Details Saved (Sandbox)!");
+        }
+      } else {
+        try {
+          saveBillingBtn.disabled = true;
+          saveBillingBtn.textContent = "Saving...";
+          
+          const leadRef = doc(db, "leads", selectedLeadId);
+          await updateDoc(leadRef, {
+            amount: amt,
+            paymentLink: link
+          });
+          
+          showToast("Billing details configured!");
+        } catch (error) {
+          console.error("Firestore Billing Sync Error:", error);
+          alert("Error saving invoice configuration.");
+        } finally {
+          saveBillingBtn.disabled = false;
+          saveBillingBtn.textContent = "Save & Generate Invoice";
+        }
+      }
+    });
+
+    // SHARING UTILITY ACTIONS
+    function getShareText(leadName, service, amount, portalUrl) {
+      return `Dear ${leadName},\n\nYour invoice for Elite Associates (${service}) of amount ₹${amount} is ready. Please view the digital invoice details and complete secure checkout here:\n\n${portalUrl}\n\nThank you,\nAvinash Kumar\nElite Associates`;
+    }
+
+    copyInvoiceLinkBtn.addEventListener('click', () => {
+      generatedInvoiceLink.select();
+      navigator.clipboard.writeText(generatedInvoiceLink.value);
+      showToast("Invoice Portal URL copied!");
+    });
+
+    copyWhatsappBtn.addEventListener('click', () => {
+      const activeLead = leadsData.find(l => l.id === selectedLeadId);
+      if (!activeLead) return;
+      
+      const portalUrl = generatedInvoiceLink.value;
+      const shareText = getShareText(activeLead.name, activeLead.service, activeLead.amount, portalUrl);
+      
+      navigator.clipboard.writeText(shareText);
+      showToast("WhatsApp template message copied!");
+    });
+
+    sendWhatsappBtn.addEventListener('click', () => {
+      const activeLead = leadsData.find(l => l.id === selectedLeadId);
+      if (!activeLead) return;
+
+      const portalUrl = generatedInvoiceLink.value;
+      const shareText = encodeURIComponent(getShareText(activeLead.name, activeLead.service, activeLead.amount, portalUrl));
+      
+      // Clean phone number for WhatsApp API
+      let cleanPhone = activeLead.phone.replace(/[^0-9]/g, '');
+      if (cleanPhone.length === 10) {
+        cleanPhone = "91" + cleanPhone; // Add India country code if 10 digit
+      }
+
+      window.open(`https://api.whatsapp.com/send?phone=${cleanPhone}&text=${shareText}`, '_blank');
+    });
+
+    // MODAL CONTROL ACTIONS
+    openManualLeadBtn.addEventListener('click', () => {
+      manualLeadForm.reset();
+      manualLeadModal.style.display = 'flex';
+    });
+
+    closeManualLeadBtn.addEventListener('click', () => {
+      manualLeadModal.style.display = 'none';
+    });
+
+    // MANUAL LEAD SUBMISSION
+    manualLeadForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('mName').value.trim();
+      const phone = document.getElementById('mPhone').value.trim();
+      const email = document.getElementById('mEmail').value.trim();
+      const service = document.getElementById('mService').value;
+      const message = document.getElementById('mMessage').value.trim();
+
+      const newLead = {
+        name,
+        phone,
+        email,
+        service,
+        message,
+        status: "new",
+        amount: 0,
+        paymentLink: "",
+        paymentStatus: "unpaid"
+      };
+
+      if (isSandboxMode) {
+        const mockId = "mock_lead_" + Date.now();
+        const fullLead = {
+          id: mockId,
+          ...newLead,
+          createdAt: { toDate: () => new Date() }
+        };
+        
+        leadsData.unshift(fullLead);
+        renderStats();
+        renderLeads();
+        
+        manualLeadModal.style.display = 'none';
+        showToast("Offline lead added (Sandbox)");
+      } else {
+        try {
+          const submitBtn = manualLeadForm.querySelector('button[type="submit"]');
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Creating...";
+
+          await addDoc(collection(db, "leads"), {
+            ...newLead,
+            createdAt: serverTimestamp()
+          });
+
+          manualLeadModal.style.display = 'none';
+          showToast("Walk-in lead created successfully!");
+        } catch (error) {
+          console.error("Error creating walk-in lead:", error);
+          alert("Could not save manual lead to Firebase.");
+        } finally {
+          const submitBtn = manualLeadForm.querySelector('button[type="submit"]');
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Create Lead";
+        }
+      }
+    });
+
+    // GENERAL HELPER: TOAST NOTIFICATIONS
+    function showToast(message) {
+      toastBox.textContent = message;
+      toastBox.style.display = 'block';
+      setTimeout(() => {
+        toastBox.style.display = 'none';
+      }, 3000);
+    }
+  </script>
+</body>
+
+</html>
